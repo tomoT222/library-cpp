@@ -12,6 +12,8 @@ to_omoT222のライブラリだよ
 
 が求められる。全てO（logN）だと思う。
 
+↓initまでの流れ
+
 ```c++
 	ll n; cin >> n;
 	vector<ll> v(n + 1);
