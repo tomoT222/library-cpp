@@ -1,4 +1,3 @@
-//Euler Tourのverify
 // Euler Tour
 //refer to : EulerTourのお勉強 - maspyのHP
 ///////////////1-indexedにして！！！！！！！！！！！！！
