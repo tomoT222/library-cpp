@@ -13,7 +13,7 @@ to_omoT222のライブラリだよ
 が求められる。全てO（logN）だと思う。
 
 ```c++
-  ll n; cin >> n;
+	ll n; cin >> n;
 	vector<ll> v(n + 1);
 	vector<vector<P>> G(n + 1);
 	rep2(i, n) { cin >> v[i]; } //1-indexed
