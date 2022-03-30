@@ -21,7 +21,7 @@ struct rsq {
 		}
 	}
 
-	//[a, b)の最小値を求める
+	//[a, b)のsumを求める
 	ll query(ll a, ll b, ll k = 0, ll l = 0, ll r = -1) {
 		if (r < 0) { r = nn; }
 		if (r <= a || b <= l) { return 0; }
@@ -71,7 +71,7 @@ struct ET {
 
 	//public
 	ll n, root;
-	vector<vector<P>> G;//to, cost
+	vector<vector<edge>> G;//to, cost
 	vector<ll> v;//頂点の値
 	vector<ll> e;//辺の値(indexは子の方、1はない)
 
@@ -85,11 +85,15 @@ struct ET {
 	vector<ll> e_sum1;//サイトでいう"辺の合計"(部分木)
 	vector<ll> v_sum2;//サイトでいう"頂点の合計"(path)
 	vector<ll> e_sum2;//サイトでいう"辺の合計"(path)
-	vector<P> dep;
+	vector<P> dep;//P(深さ、"辺"のindex)
+
+	rsq rv1, rv2;
+	rsq re1, re2;
+	rmq rd;//depth
 
 	//1-indexed！！
-	void init(ll kn, vector<vector<P>> kG, ll kroot = 1, vector<ll> kv = {}) {
-		n = kn; G = kG; root = kroot; v = kv;
+	ET(ll kn, vector<vector<edge>> kG, vector<ll> kv = {}) {
+		n = kn; G = kG; root = 1; v = kv;
 		e.resize(n + 1); in.resize(n + 1); out.resize(n + 1); par.resize(n + 1);
 		dfs(root);
 		rep(i, hen.size()) {
@@ -117,14 +121,18 @@ struct ET {
 			else if (hen[i] > 0) { dep.push_back(P(dep[i - 1].first + 1, i)); }
 			else { dep.push_back(P(dep[i - 1].first - 1, i)); }
 		}
+
+		rv1.init(kn * 2, v_sum1); rv2.init(kn * 2, v_sum2);
+		re1.init(kn * 2, e_sum1); re2.init(kn * 2, e_sum2);
+		rd.init(kn * 2, dep);
 	}
 	void dfs(ll k) {
 		in[k] = hen.size(); hen.push_back(k); vs.push_back(k);
 		rep(i, G[k].size()) {
-			if (G[k][i].first == par[k]) { continue; }
-			e[G[k][i].first] = G[k][i].second;
-			par[G[k][i].first] = k;
-			dfs(G[k][i].first);
+			if (G[k][i].to == par[k]) { continue; }
+			e[G[k][i].to] = G[k][i].cost;
+			par[G[k][i].to] = k;
+			dfs(G[k][i].to);
 			vs.push_back(k);
 		}
 		out[k] = hen.size(); hen.push_back(0 - k);
@@ -140,51 +148,49 @@ struct ET {
 		}
 	}
 
-	rsq rv1, rv2;
-	rsq re1, re2;
-	rmq rd;//depth
+	//////////値の変更
+	//頂点の値の変更
+	void v_update(ll k, ll v) {
+		rv1.update(in[k], v);
+		rv2.update(in[k], v); rv2.update(out[k], 0 - v);
+	}
+	//辺の値の変更
+	void e_update(ll v1, ll v2, ll e) {//v1,v2は辺の2頂点
+		ll k = v1;
+		if (in[v1] < in[v2]) { k = v2; }
+		re1.update(in[k], e);
+		re2.update(in[k], e); re2.update(out[k], 0 - e);
+	}
+	//////////部分木クエリ
+	//頂点の値の合計
+	ll t_v_sum(ll k) {//頂点kが根の部分木、O(セグメント木)
+		return rv1.query(in[k], out[k]);
+	}
+	//辺の値の合計
+	ll t_e_sum(ll k) {//頂点kが根の部分木、O(セグメント木)
+		return re1.query(in[k] + 1, out[k]);
+	}
+
+	//////////根からある頂点iまでのパス
+	//頂点の値の合計
+	ll p_v_sum(ll k) {//root~k
+		return rv2.query(0, in[k] + 1);
+	}
+	//辺の値の合計
+	ll p_e_sum(ll k) {//root~k
+		return re2.query(1, in[k] + 1);
+	}
+	//任意の点a,b間のパスの長さ
+	ll len(ll a, ll b) {
+		return p_e_sum(a) + p_e_sum(b) - p_e_sum(lca(a, b)) * 2;
+	}
+
+	//////////LCA
+	ll lca(ll a, ll b) {//頂点a,bのLCA
+		if (in[a] > in[b]) { swap(a, b); }
+		return vs[rd.query(in[a], in[b] + 1).second];
+	}
+
 };
-ET et;
 //1-indexed！！
 //kv[0]=0;(1-indexedで)
-//ll a,b,c; cin>>a>>b>>c; if(a>b){swap(a,b);} G[a].push_back(P(b, c));
-void init(ll kn, vector<vector<P>> kG, ll kroot = 1, vector<ll> kv = {}) {
-	et.init(kn, kG, kroot, kv);
-	et.rv1.init(kn * 2, et.v_sum1); et.rv2.init(kn * 2, et.v_sum2);
-	et.re1.init(kn * 2, et.e_sum1); et.re2.init(kn * 2, et.e_sum2);
-	et.rd.init(kn * 2, et.dep);
-}
-//////////値の変更
-//頂点の値の変更
-void v_update(ll k, ll v) {
-	et.rv1.update(et.in[k], v);
-	et.rv2.update(et.in[k], v); et.rv2.update(et.out[k], 0 - v);
-}
-//辺の値の変更
-void e_update(ll k, ll e) {//kは辺の2つの頂点の内、根から遠いほうの頂点番号？
-	et.re1.update(et.in[k], e);
-	et.re2.update(et.in[k], e); et.re2.update(et.out[k], 0 - e);
-}
-//////////部分木クエリ
-//頂点の値の合計
-ll t_v_sum(ll k) {//頂点kが根の部分木、O(セグメント木)
-	return et.rv1.query(et.in[k], et.out[k]);
-}
-//辺の値の合計
-ll t_e_sum(ll k) {//頂点kが根の部分木、O(セグメント木)
-	return et.re1.query(et.in[k] + 1, et.out[k]);
-}
-//////////根からある頂点iまでのパス
-//頂点の値の合計
-ll p_v_sum(ll k) {//root~k
-	return et.rv2.query(0, et.in[k] + 1);
-}
-//辺の値の合計
-ll p_e_sum(ll k) {//root~k
-	return et.re2.query(1, et.in[k] + 1);
-}
-//////////LCA
-ll lca(ll a, ll b) {//頂点a,bのLCA
-	if (et.in[a] > et.in[b]) { swap(a, b); }
-	return et.vs[et.rd.query(et.in[a], et.in[b] + 1).second];
-}
