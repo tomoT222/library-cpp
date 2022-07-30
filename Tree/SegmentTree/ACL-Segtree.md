@@ -23,5 +23,10 @@ void seg.set(int p, S x) //a[p] に x を代入。O(logn)
 S seg.get(int p)         //a[p] を返す。O(1)
 S seg.prod(int l, int r) //op(a[l], ..., a[r - 1]) を返す。O(logn)
 S seg.all_prod()         //op(a[0], ..., a[n - 1]) を返す。O(1)
+
+(1) int seg.max_right<f>(int l)
+(2💻) int seg.max_right<F>(int l, F f)
+(1) int seg.min_left<f>(int r)
+(2💻) int seg.min_left<F>(int r, F f)
 ```
 
