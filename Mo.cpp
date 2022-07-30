@@ -1,3 +1,5 @@
+//https://ei1333.hateblo.jp/entry/2017/09/11/211011
+
 struct Mo {
 	int n;
 	vector< pair< int, int > > lr;
