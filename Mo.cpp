@@ -1,4 +1,5 @@
 //https://ei1333.hateblo.jp/entry/2017/09/11/211011
+//https://qiita.com/ageprocpp/items/34121c58e571ea8c4023
 
 struct Mo {
 	int n;
