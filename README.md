@@ -1,7 +1,7 @@
 # library-cpp
 to_omoT222のライブラリだよ
 
-## EulerTour
+## Tree/EulerTour.hpp
 頂点が1-indexedの木において
 
 ・どっかの頂点を根とする部分木内の頂点（辺）の値の合計
