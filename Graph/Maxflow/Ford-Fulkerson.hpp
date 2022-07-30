@@ -1,4 +1,5 @@
 //ACLを使った方がいいよ
+//O(F*E) 最大流量F 辺数E
 
 //辺を表す構造体（行先、容量、逆辺）
 struct edge { ll to, cap, rev; };
