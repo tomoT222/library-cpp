@@ -20,7 +20,7 @@ mat mul(mat& A, mat& B) {
 	return C;
 }
 //A^nの計算
-mat pow(mat A, ll n) {
+mat matpow(mat A, ll n) {
 	mat B(A.size(), vec(A.size()));
 	for (int i = 0; i < A.size(); i++) {
 		B[i][i] = 1;
@@ -39,6 +39,6 @@ void solve() {
 	mat A(2, vec(2));
 	A[0][0] = 1; A[0][1] = 1;
 	A[1][0] = 1; A[1][1] = 0;
-	A = pow(A, n);
+	A = matpow(A, n);
 	cout << A[1][0] << endl;
 }
