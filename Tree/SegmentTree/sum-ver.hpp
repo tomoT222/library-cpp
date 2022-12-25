@@ -23,7 +23,7 @@ struct rsq {
 		}
 	}
 
-	//[a, b)の最小値を求める
+	//[a, b)のsumを求める
 	//kは節点の番号、l, rはその節点が[l, r)に対応づいていることを表す。
 	//したがって外からはquery(a, b, 0, 0, nn)として呼ぶ。
 	ll query(ll a, ll b, ll k = 0, ll l = 0, ll r = -1) {
