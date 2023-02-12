@@ -71,7 +71,7 @@ struct CD {
 	void solve_subproblem(ll v) {
 		// 重心となるsを探す
 		compute_subtree_size(v, -1);
-		ll s = search_centroid(v, -11, subtree_size[v]).second;
+		ll s = search_centroid(v, -1, subtree_size[v]).second;
 		centroid[s] = true;
 
 		// (1):頂点sにより分割した部分木の中に関して数える
