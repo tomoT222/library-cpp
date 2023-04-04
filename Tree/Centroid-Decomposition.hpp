@@ -1,3 +1,10 @@
+/*
+CF Ciel the Commander
+https://codeforces.com/contest/321/submission/197610872
+AC 木の問題
+https://atcoder.jp/contests/yahoo-procon2018-final-open/submissions/40323778
+*/
+
 //重心分解
 struct CD {
 	//0-index
