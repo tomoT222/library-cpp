@@ -13,7 +13,7 @@ ll rec(ll bit) {
     if (dp[bit] != -1) return dp[bit];
 
     // 答えを格納する変数
-    int res = INF;
+    ll res = INF;
     for (int v = 0; v < n; v++) {
         //集合bitにvが含まれるか
         if ((bit & (1 << v)) != 0) {
