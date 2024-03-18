@@ -1,3 +1,9 @@
+/*
+K - 虫取り
+https://atcoder.jp/contests/iroha2019-day2/submissions/51190525
+部分木加算　と　パスの和＆パスに対する更新
+*/
+
 // https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/5/GRL_5_D
 // のACコード。
 // 0-indexed。セグメント木やHLD内でのクエリのadd,sumの処理の部分を適宜書き換える。
