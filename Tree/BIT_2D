@@ -9,17 +9,17 @@ struct BIT_2D {
 	ll sum(int a, int b) { // [1, a]*[1, b] の和
 		ll s = 0;
 		for (int x = a; x > 0; x -= x & -x) {
-      for (int y = b; y > 0; y -= y & -y) {
-        s += bit[x][y];
-      }
+			for (int y = b; y > 0; y -= y & -y) {
+				s += bit[x][y];
+			}
 		}
 		return s;
 	}
 	void add(int a, int b, ll w) { // (a, b) に w を加える
 		for (int x = a; x <= n; x += x & -x) {
-      for (int y = b; y <= m; y += y & -y) {
-			  bit[x][y] += w;
-      }
+			for (int y = b; y <= m; y += y & -y) {
+				bit[x][y] += w;
+			}
 		}
 	}
 };
